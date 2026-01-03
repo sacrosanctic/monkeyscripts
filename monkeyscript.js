@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1359
+// @version      2026-01-03-1360
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -93,11 +93,33 @@
     inject({ selector: '.ant-table-content', content: el => el.style.overflow = "visible" })
 
     // add links where none exists
-    inject({ selector: '.ant-table-row.ant-table-row-level-0', content: el => {
-      const span = el.querySelector("td:nth-child(8) > span");
-      if (!span) return
-
+    // Process existing spans
+    document.querySelectorAll('.ant-table-row.ant-table-row-level-0 td:nth-child(8) > span').forEach(span => {
       const productId = span.innerHTML.split(" ")[0];
       span.innerHTML = `<a href="/request-payment?productId=${productId}">${span.innerHTML}</a>`;
-    }, multiple: true });
+    });
+
+    // Observe for new spans
+    const tableObserver = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType === 1) {
+            if (node.matches('td:nth-child(8) > span')) {
+              const productId = node.innerHTML.split(" ")[0];
+              node.innerHTML = `<a href="/request-payment?productId=${productId}">${node.innerHTML}</a>`;
+            }
+            // Check descendants
+            node.querySelectorAll && node.querySelectorAll('td:nth-child(8) > span').forEach(span => {
+              const productId = span.innerHTML.split(" ")[0];
+              span.innerHTML = `<a href="/request-payment?productId=${productId}">${span.innerHTML}</a>`;
+            });
+          }
+        });
+      });
+    });
+
+    const table = document.querySelector('.ant-table');
+    if (table) {
+      tableObserver.observe(table, { childList: true, subtree: true });
+    }
 })();

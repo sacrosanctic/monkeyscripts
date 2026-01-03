@@ -57,7 +57,7 @@
     injectOnSelector('.ant-spin-container', el => {
       el.children[1]?.style.cssText += "overflow: auto; height: 800px";
     });
-    injectOnSelector('ant-table-row ant-table-row-level-0', el=>{
+    injectOnSelector('.ant-table-row.ant-table-row-level-0', el=>{
       console.log(el)
       console.log(el.querySelector("td:nth-child(8)"))
     });

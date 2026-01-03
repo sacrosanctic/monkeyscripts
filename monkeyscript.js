@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1308
+// @version      2026-01-03-1317
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -15,17 +15,21 @@
 (function() {
     'use strict';
 
-    function inject(selector, html) {
+    function injectOnSelector(selector, content) {
         let added = false;
         let timeout;
 
-        function add() {
+        function add(fn) {
             if (added) return;
             const el = document.querySelector(selector);
-            if (el) {
-                el.insertAdjacentHTML('afterbegin', html);
-                added = true;
+            if (!el) return;
+            if (typeof content === 'function') {
+                content(el);
+            } else {
+                el.insertAdjacentHTML('afterbegin', content);
             }
+            added = true;
+            fn?.();
         }
 
         add();
@@ -33,9 +37,8 @@
             const observer = new MutationObserver(() => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
-                    add();
-                    if (added) observer.disconnect();
-                }, 100);
+                    add(() => observer.disconnect());
+                }, 500);
             });
             observer.observe(document.body, { childList: true, subtree: true });
         }
@@ -49,7 +52,9 @@
         </form>
     `;
 
-    inject('.ant-spin-container > :first-child', formHTML);
+    injectOnSelector('.ant-spin-container > :first-child', formHTML);
 
-    // injectOnSelector('.ant-spin-container > :first-child', formHTML);
+    injectOnSelector('.ant-spin-container', el => {
+        el.style.cssText += "display: flex; height: 500px;";
+    });
 })();

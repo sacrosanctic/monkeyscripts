@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03
+// @version      2026-01-04
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment/
+// @match        http://localhost:5173/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=undefined.localhost
 // @updateURL    https://raw.githubusercontent.com/sacrosanctic/monkeyscripts/main/monkeyscript.js
 // @downloadURL  https://raw.githubusercontent.com/sacrosanctic/monkeyscripts/main/monkeyscript.js

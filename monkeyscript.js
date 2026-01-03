@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1138
+// @version      2026-01-03-1143
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment
@@ -30,24 +30,27 @@
         console.log('Form added to', selector);
     }
 
-    function checkAndGet() {
+    function getElement() {
         return document.querySelector(selector);
     }
 
     // Check immediately
-    let targetElement = checkAndGet();
+    let targetElement = getElement();
     if (targetElement) {
         addForm(targetElement);
     } else {
         console.log('Setting up observer for', selector);
-        const observer = new MutationObserver(() => {
+        const observer = new MutationObserver((mutations) => {
+            console.log('Mutations:', mutations.length, 'detected');
             console.log('Mutation detected');
-            targetElement = checkAndGet();
-            if (targetElement) {
-                addForm(targetElement);
-                observer.disconnect();
-                console.log('Observer disconnected');
-            }
+            setTimeout(() => {
+                targetElement = getElement();
+                if (targetElement) {
+                    addForm(targetElement);
+                    observer.disconnect();
+                    console.log('Observer disconnected');
+                }
+            }, 100);
         });
         observer.observe(document.body, { childList: true, subtree: true });
     }

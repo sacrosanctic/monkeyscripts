@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1205
+// @version      2026-01-03-1206
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment
@@ -17,44 +17,40 @@
 
     const selector = '.ant-spin-container > :first-child';
 
-    function addForm(targetElement) {
-        const formHTML = `
-            <form style="margin: 20px; padding: 10px; border: 1px solid #ccc;">
-                <label for="customInput">Custom Input: </label>
-                <input id="customInput" name="productId" />
-                <button type="submit">Submit</button>
-            </form>
-        `;
-
-        targetElement.insertAdjacentHTML('afterbegin', formHTML);
-        console.log('Form added to', selector);
-    }
-
     function getElement() {
         return document.querySelector(selector);
     }
 
     let added = false;
 
-    function tryAdd() {
+    function addFormIfNeeded() {
         if (added) return;
         const targetElement = getElement();
         if (targetElement) {
-            addForm(targetElement);
+            const formHTML = `
+                <form style="margin: 20px; padding: 10px; border: 1px solid #ccc;">
+                    <label for="customInput">Custom Input: </label>
+                    <input id="customInput" name="productId" />
+                    <button type="submit">Submit</button>
+                </form>
+            `;
+
+            targetElement.insertAdjacentHTML('afterbegin', formHTML);
+            console.log('Form added to', selector);
             added = true;
             console.log('Form added, stopping observation');
         }
     }
 
     // Check immediately
-    tryAdd();
+    addFormIfNeeded();
     if (!added) {
         console.log('Setting up observer for', selector);
         const observer = new MutationObserver((mutations) => {
             console.log('Mutations:', mutations.length, 'detected');
             console.log('Mutation detected');
             setTimeout(() => {
-                tryAdd();
+                addFormIfNeeded();
                 if (added) {
                     observer.disconnect();
                     console.log('Observer disconnected');

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1113
+// @version      2026-01-03-1114
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment
@@ -19,19 +19,22 @@
 
     if (!targetElement) return;
 
-    // 2. Fetch the form HTML
-    fetch('https://raw.githubusercontent.com/sacrosanctic/monkeyscripts/main/form.html')
-        .then(response => response.text())
-        .then(formHTML => {
-            // 3. Insert the form as the first child of the target element
-            targetElement.insertAdjacentHTML('afterbegin', formHTML);
+    // 2. Define your form HTML
+    const formHTML = `
+        <form action="/request-payment" style="margin: 20px; padding: 10px; border: 1px solid #ccc;">
+            <label for="customInput">Custom Input: </label>
+            <input id="customInput" name="productId" />
+            <button id="submitBtn" type="submit">Submit</button>
+        </form>
+    `;
 
-            // 4. Add functionality to your new form
-            document.getElementById('submitBtn').addEventListener('click', (e) => {
-                e.preventDefault();
-                const val = document.getElementById('customInput').value;
-                alert('Form submitted with: ' + val);
-            });
-        })
-        .catch(error => console.error('Error loading form:', error));
+    // 3. Insert the form as the first child of the target element
+    targetElement.insertAdjacentHTML('afterbegin', formHTML);
+
+    // 4. Add functionality to your new form
+    document.getElementById('submitBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        const val = document.getElementById('customInput').value;
+        alert('Form submitted with: ' + val);
+    });
 })();

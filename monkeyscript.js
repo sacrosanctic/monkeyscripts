@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1361
+// @version      2026-01-03-1362
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -94,20 +94,43 @@
 
     // add links where none exists
     // Process existing spans
-    document.querySelectorAll('.ant-table-row.ant-table-row-level-0 td:nth-child(8) > span').forEach(span => {
+    const existingSpans = document.querySelectorAll('.ant-table-row.ant-table-row-level-0 td:nth-child(8) > span');
+    console.log('Processing existing spans:', existingSpans.length);
+    existingSpans.forEach(span => {
       const productId = span.innerHTML.split(" ")[0];
       span.innerHTML = `<a href="/request-payment?productId=${productId}">${span.innerHTML}</a>`;
     });
 
     // Observe for new spans
     const tableObserver = new MutationObserver(mutations => {
+      console.log('Mutation observed:', mutations);
       mutations.forEach(mutation => {
         mutation.addedNodes.forEach(node => {
+          console.log('Added node:', node);
           if (node.nodeType === 1) {
             if (node.matches('td:nth-child(8) > span')) {
+              console.log('Span matched, innerHTML:', node.innerHTML);
               const productId = node.innerHTML.split(" ")[0];
               node.innerHTML = `<a href="/request-payment?productId=${productId}">${node.innerHTML}</a>`;
+              console.log('Modified to:', node.innerHTML);
             }
+            // Check descendants
+            node.querySelectorAll && node.querySelectorAll('td:nth-child(8) > span').forEach(span => {
+              console.log('Descendant span found, innerHTML:', span.innerHTML);
+              const productId = span.innerHTML.split(" ")[0];
+              span.innerHTML = `<a href="/request-payment?productId=${productId}">${span.innerHTML}</a>`;
+              console.log('Descendant modified to:', span.innerHTML);
+            });
+          }
+        });
+      });
+    });
+
+    const table = document.querySelector('.ant-table');
+    console.log('Table element:', table);
+    if (table) {
+      tableObserver.observe(table, { childList: true, subtree: true });
+    }
             // Check descendants
             node.querySelectorAll && node.querySelectorAll('td:nth-child(8) > span').forEach(span => {
               const productId = span.innerHTML.split(" ")[0];

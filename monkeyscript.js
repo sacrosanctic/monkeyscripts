@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1340
+// @version      2026-01-03-1345
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -55,7 +55,7 @@
     injectOnSelector('.ant-spin-container > :first-child', formHTML);
 
     injectOnSelector('.ant-spin-container', el => {
-      el.children[1]?.style.cssText += "overflow: auto; height: 800px";
+      el.children?.[1]?.style.cssText += "overflow: auto; height: 800px";
     });
     injectOnSelector('.ant-table-row.ant-table-row-level-0', el=>{
       console.log(el)

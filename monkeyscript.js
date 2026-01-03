@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1362
+// @version      2026-01-03-1363
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -105,6 +105,13 @@
     const tableObserver = new MutationObserver(mutations => {
       console.log('Mutation observed:', mutations);
       mutations.forEach(mutation => {
+        if (mutation.type === 'characterData' && mutation.target.parentElement && mutation.target.parentElement.matches('td:nth-child(8) > span')) {
+          const span = mutation.target.parentElement;
+          console.log('CharacterData on span, innerHTML:', span.innerHTML);
+          const productId = span.innerHTML.split(" ")[0];
+          span.innerHTML = `<a href="/request-payment?productId=${productId}">${span.innerHTML}</a>`;
+          console.log('Modified to:', span.innerHTML);
+        }
         mutation.addedNodes.forEach(node => {
           console.log('Added node:', node);
           if (node.nodeType === 1) {
@@ -129,7 +136,7 @@
     const table = document.querySelector('.ant-table');
     console.log('Table element:', table);
     if (table) {
-      tableObserver.observe(table, { childList: true, subtree: true });
+      tableObserver.observe(table, { childList: true, subtree: true, characterData: true });
     }
             // Check descendants
             node.querySelectorAll && node.querySelectorAll('td:nth-child(8) > span').forEach(span => {

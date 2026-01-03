@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1208
+// @version      2026-01-03-1250
 // @description  try to take over the world!
 // @author       You
-// @match        https://payment.xinchuan.tw/request-payment
+// @match        https://payment.xinchuan.tw/request-payment*
 // @match        http://localhost:5173/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=undefined.localhost
 // @updateURL    https://raw.githubusercontent.com/sacrosanctic/monkeyscripts/main/monkeyscript.js
@@ -25,31 +25,31 @@
 
     function addForm() {
         if (added) return;
-        const targetElement = getElement();
-        if (targetElement) {
-            const formHTML = `
-                <form style="margin: 20px; padding: 10px; border: 1px solid #ccc;display: flex;">
-                    <label for="customInput">Custom Input: </label>
-                    <input id="customInput" name="productId" />
-                    <button type="submit">Submit</button>
-                </form>
-            `;
 
-            targetElement.insertAdjacentHTML('afterbegin', formHTML);
-            added = true;
-        }
+        const targetElement = getElement();
+        if (!targetElement) return
+
+        const formHTML = `
+            <form style="margin: 20px; padding: 10px; border: 1px solid #ccc;display: flex;">
+                <label for="customInput">Search: </label>
+                <input id="customInput" name="productId" style="height: 2em;" />
+                <button type="submit">Submit</button>
+            </form>
+        `;
+
+        targetElement.insertAdjacentHTML('afterbegin', formHTML);
+        added = true;
     }
 
-    // Check immediately
     addForm();
     if (added) return;
+
     const observer = new MutationObserver(() => {
         setTimeout(() => {
             addForm();
-            if (added) {
-                observer.disconnect();
-            }
+            if (added) observer.disconnect();
+            
         }, 100);
     });
-        observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, subtree: true });
 })();

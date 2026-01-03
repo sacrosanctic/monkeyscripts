@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1115
+// @version      2026-01-03-1116
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment
@@ -20,10 +20,10 @@
     if (!targetElement) return;
 
     const formHTML = `
-        <form action="/request-payment" style="margin: 20px; padding: 10px; border: 1px solid #ccc;">
-            <label for="customInput">Custom Input: </label>
-            <input id="customInput" name="productId" />
-            <button id="submitBtn" type="submit">Submit</button>
+        <form style="margin: 20px; padding: 10px; border: 1px solid #ccc;">
+            <label>Custom Input: </label>
+            <input name="productId" />
+            <button type="submit">Submit</button>
         </form>
     `;
 

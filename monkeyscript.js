@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1252
+// @version      2026-01-03-1258
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -15,38 +15,40 @@
 (function() {
     'use strict';
 
-    const selector = '.ant-spin-container > :first-child';
+    function injectOnSelector(selector, html) {
+        let added = false;
 
-    let added = false;
+        function add() {
+            if (added) return;
+            const el = document.querySelector(selector);
+            if (el) {
+                el.insertAdjacentHTML('afterbegin', html);
+                added = true;
+            }
+        }
 
-    function addForm() {
-        if (added) return;
-
-        const targetElement = document.querySelector(selector);
-        if (!targetElement) return
-
-        const formHTML = `
-            <form style="margin: 20px; padding: 10px; border: 1px solid #ccc;display: flex;">
-                <label for="customInput">Search: </label>
-                <input id="customInput" name="productId" style="height: 2em;" />
-                <button type="submit">Submit</button>
-            </form>
-        `;
-
-        targetElement.insertAdjacentHTML('afterbegin', formHTML);
-        added = true;
+        add();
+        if (!added) {
+            const observer = new MutationObserver(() => {
+                requestAnimationFrame(() => {
+                    add();
+                    if (added) observer.disconnect();
+                });
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+        }
     }
 
-    addForm();
-    if (added) return;
+    const formHTML = `
+        <form style="margin: 20px; padding: 10px; border: 1px solid #ccc;display: flex;">
+            <label for="customInput">Search: </label>
+            <input id="customInput" name="productId" style="height: 2em;" />
+            <button type="submit">Submit</button>
+        </form>
+    `;
 
-    const observer = new MutationObserver(() => {
-        requestAnimationFrame(() => {
-            addForm();
-            if (added) {
-                observer.disconnect();
-            }
-        });
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
+    injectOnSelector('.ant-spin-container > :first-child', formHTML);
+
+    // Add more injections here, e.g.:
+    // injectOnSelector('another-selector', anotherHTML);
 })();

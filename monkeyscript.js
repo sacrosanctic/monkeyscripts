@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1356
+// @version      2026-01-03-1357
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -15,32 +15,62 @@
 (function() {
     'use strict';
 
-    function inject(selector, content) {
-        let added = false;
-        let timeout;
+    function inject(options) {
+        const { selector, content, multiple = false } = options;
 
-        function add(fn) {
-            if (added) return;
-            const el = document.querySelector(selector);
-            if (!el) return;
-            if (typeof content === 'function') {
-                content(el);
-            } else {
-                el.insertAdjacentHTML('afterbegin', content);
-            }
-            added = true;
-            fn?.();
-        }
+        if (multiple) {
+            // Process existing elements
+            document.querySelectorAll(selector).forEach(el => {
+                if (typeof content === 'function') {
+                    content(el);
+                } else {
+                    el.insertAdjacentHTML('afterbegin', content);
+                }
+            });
 
-        add();
-        if (!added) {
-            const observer = new MutationObserver(() => {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    add(() => observer.disconnect());
-                }, 500);
+            // Observe for new elements
+            const observer = new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                    mutation.addedNodes.forEach(node => {
+                        if (node.nodeType === 1 && node.matches(selector)) {
+                            if (typeof content === 'function') {
+                                content(node);
+                            } else {
+                                node.insertAdjacentHTML('afterbegin', content);
+                            }
+                        }
+                    });
+                });
             });
             observer.observe(document.body, { childList: true, subtree: true });
+        } else {
+            // Original single-element logic
+            let added = false;
+            let timeout;
+
+            function add(fn) {
+                if (added) return;
+                const el = document.querySelector(selector);
+                if (!el) return;
+                if (typeof content === 'function') {
+                    content(el);
+                } else {
+                    el.insertAdjacentHTML('afterbegin', content);
+                }
+                added = true;
+                fn?.();
+            }
+
+            add();
+            if (!added) {
+                const observer = new MutationObserver(() => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        add(() => observer.disconnect());
+                    }, 500);
+                });
+                observer.observe(document.body, { childList: true, subtree: true });
+            }
         }
     }
 
@@ -52,21 +82,21 @@
         </form>
     `;
 
-    inject('.ant-spin-container > :first-child', formHTML);
+    inject({ selector: '.ant-spin-container > :first-child', content: formHTML });
 
-    inject('.ant-spin-container', el => {
+    inject({ selector: '.ant-spin-container', content: el => {
         if( el.children[1]) el.children[1].style.cssText += "overflow: auto; height: 800px;";
-    });
+    } });
 
-    inject('.ant-table-content',el=>el.style.overflow="visible")
+    inject({ selector: '.ant-table-content', content: el => el.style.overflow = "visible" })
 
 
-    inject('.ant-table-row.ant-table-row-level-0', el => {
+    inject({ selector: '.ant-table-row.ant-table-row-level-0', content: el => {
       const span = el.querySelector("td:nth-child(8) > span");
       if (span) {
         const productId = span.innerHTML.split(" ")[0];
         span.innerHTML = `<a href="/request-payment?productId=${productId}">${span.innerHTML}</a>`;
       }
-    });
+    }, multiple: true });
 
 })();

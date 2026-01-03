@@ -56,7 +56,7 @@
 
     inject('.ant-spin-container', el => {
         el.style.cssText += "display: flex; height: 100%; flex-direction: column;";
-        el.children?.[1]?.style.cssText += "overflow: auto; height: 800px;";
+        if( el.children[1]) el.children[1].style.cssText += "overflow: auto; height: 800px;";
     });
     inject('.ant-table-row.ant-table-row-level-0', el=>{
       console.log(el)

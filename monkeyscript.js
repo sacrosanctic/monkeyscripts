@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1358
+// @version      2026-01-03-1359
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -31,14 +31,19 @@
             document.querySelectorAll(selector).forEach(applyContent);
 
             // Observe for new elements
-            const observer = new MutationObserver(mutations => {
-                mutations.forEach(mutation => {
-                    mutation.addedNodes.forEach(node => {
-                        if (node.nodeType === 1 && node.matches(selector)) {
-                            applyContent(node);
-                        }
+            let timeout;
+            const observer = new MutationObserver(() => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    const mutations = observer.takeRecords();
+                    mutations.forEach(mutation => {
+                        mutation.addedNodes.forEach(node => {
+                            if (node.nodeType === 1 && node.matches(selector)) {
+                                applyContent(node);
+                            }
+                        });
                     });
-                });
+                }, 500);
             });
             observer.observe(document.body, { childList: true, subtree: true });
         } else {
@@ -59,8 +64,7 @@
             if (!added) {
                 const observer = new MutationObserver(() => {
                     clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        add(() => observer.disconnect());
+                    timeout = setTimeout(() => {                        add(() => observer.disconnect());
                     }, 500);
                 });
                 observer.observe(document.body, { childList: true, subtree: true });

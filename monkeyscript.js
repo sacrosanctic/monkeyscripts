@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1345
+// @version      2026-01-03-1353
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -15,7 +15,7 @@
 (function() {
     'use strict';
 
-    function injectOnSelector(selector, content) {
+    function inject(selector, content) {
         let added = false;
         let timeout;
 
@@ -47,18 +47,21 @@
     const formHTML = `
         <form style="height: 2.25rem; padding: 0.5rem 1rem; border: 1px solid #020617; border-radius: 0.5rem; display: flex; align-items: center; background-color: white; color: #020617;">
             <label for="customInput">Search: </label>
-            <input id="customInput" name="productId"  />
+            <input id="customInput" name="productId" style="padding-left:4px" />
             <button type="submit">Submit</button>
         </form>
     `;
 
-    injectOnSelector('.ant-spin-container > :first-child', formHTML);
+    inject('.ant-spin-container > :first-child', formHTML);
 
-    injectOnSelector('.ant-spin-container', el => {
-      el.children?.[1]?.style.cssText += "overflow: auto; height: 800px";
+    inject('.ant-spin-container', el => {
+        el.style.cssText += "display: flex; height: 100%; flex-direction: column;";
+        el.children?.[1]?.style.cssText += "overflow: auto; height: 800px;";
     });
-    injectOnSelector('.ant-table-row.ant-table-row-level-0', el=>{
+    inject('.ant-table-row.ant-table-row-level-0', el=>{
       console.log(el)
       console.log(el.querySelector("td:nth-child(8)"))
     });
+
+    inject('.ant-table-content',el=>el.style.overflow="visible")
 })();

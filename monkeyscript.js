@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1330
+// @version      2026-01-03-1331
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -47,7 +47,7 @@
     const formHTML = `
         <form style="margin: 20px; padding: 10px; border: 1px solid #ccc;display: flex;">
             <label for="customInput">Search: </label>
-            <input id="customInput" name="productId" class="ant-btn css-1xl6mxb ant-btn-text ant-btn-color-default ant-btn-variant-text flex !h-9 !py-2 !px-4 items-center justify-center !rounded-lg border transition-colors !border-slate-950 bg-white text-slate-950 hover:bg-gray-50" />
+            <input id="customInput" name="productId" class="ant-btn css-1xl6mxb ant-btn-text ant-btn-color-default ant-btn-variant-text" style="display: flex; height: 2.25rem; padding: 0.5rem 1rem; align-items: center; justify-content: center; border-radius: 0.5rem; border: 1px solid #020617; transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out; background-color: white; color: #020617;" />
             <button type="submit">Submit</button>
         </form>
     `;

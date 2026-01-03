@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1360
+// @version      2026-01-03-1361
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -118,7 +118,7 @@
       });
     });
 
-    const table = document.querySelector('.ant-table');
+    const table = document.querySelector('.ant-table-container');
     if (table) {
       tableObserver.observe(table, { childList: true, subtree: true });
     }

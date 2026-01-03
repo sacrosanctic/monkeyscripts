@@ -6,8 +6,8 @@
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment/
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=undefined.localhost
-// @updateURL    https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/monkeyscript.js
-// @downloadURL  https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/monkeyscript.js
+// @updateURL    https://raw.githubusercontent.com/sacrosanctic/monkeyscripts/main/monkeyscript.js
+// @downloadURL  https://raw.githubusercontent.com/sacrosanctic/monkeyscripts/main/monkeyscript.js
 // @grant        none
 // ==/UserScript==
 

@@ -58,4 +58,9 @@
         el.style.cssText += "display: flex; flex-direction: column";
         if (el.children[1]) el.children[1].style.cssText += "overflow: auto; height 1000px";
     });
+    injectOnSelector('ant-table-row ant-table-row-level-0', el=>{
+      console.log(el.querySelector("td:nth-child(8)"))
+    });
+
+    
 })();

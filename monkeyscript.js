@@ -55,6 +55,6 @@
     injectOnSelector('.ant-spin-container > :first-child', formHTML);
 
     injectOnSelector('.ant-spin-container', el => {
-        el.style.cssText += "display: flex; height: 500px;";
+        el.style.cssText += "display: flex; flex-direction: column; height: 500px;";
     });
 })();

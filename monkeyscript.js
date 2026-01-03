@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1363
+// @version      2026-01-03-1364
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -133,23 +133,9 @@
       });
     });
 
-    const table = document.querySelector('.ant-table');
+    const table = document.querySelector('.ant-table-container');
     console.log('Table element:', table);
     if (table) {
       tableObserver.observe(table, { childList: true, subtree: true, characterData: true });
-    }
-            // Check descendants
-            node.querySelectorAll && node.querySelectorAll('td:nth-child(8) > span').forEach(span => {
-              const productId = span.innerHTML.split(" ")[0];
-              span.innerHTML = `<a href="/request-payment?productId=${productId}">${span.innerHTML}</a>`;
-            });
-          }
-        });
-      });
-    });
-
-    const table = document.querySelector('.ant-table-container');
-    if (table) {
-      tableObserver.observe(table, { childList: true, subtree: true });
     }
 })();

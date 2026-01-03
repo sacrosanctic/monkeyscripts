@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1204
+// @version      2026-01-03-1205
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment
@@ -59,10 +59,6 @@
                     observer.disconnect();
                     console.log('Observer disconnected');
                 }
-            }, 100);
-        });
-        observer.observe(document.body, { childList: true, subtree: true });
-    }
             }, 100);
         });
         observer.observe(document.body, { childList: true, subtree: true });

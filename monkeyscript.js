@@ -45,9 +45,9 @@
     }
 
     const formHTML = `
-        <form style="margin: 20px; padding: 0.5rem 1rem; border: 1px solid #020617; border-radius: 0.5rem; display: flex; align-items: center;">
+        <form style="height: 2.25rem; padding: 0.5rem 1rem; border: 1px solid #020617; border-radius: 0.5rem; display: flex; align-items: center; background-color: white; color: #020617;">
             <label for="customInput">Search: </label>
-            <input id="customInput" name="productId" class="ant-btn css-1xl6mxb ant-btn-text ant-btn-color-default ant-btn-variant-text" style="display: flex; height: 2.25rem; padding: 0.5rem 1rem; align-items: center; justify-content: center; border-radius: 0.5rem; transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out; background-color: white; color: #020617;" />
+            <input id="customInput" name="productId"  />
             <button type="submit">Submit</button>
         </form>
     `;

@@ -61,34 +61,12 @@
     inject('.ant-table-content',el=>el.style.overflow="visible")
 
 
-    // Process existing rows
-    document.querySelectorAll('.ant-table-row.ant-table-row-level-0').forEach(row => {
-      const span = row.querySelector("td:nth-child(8) > span");
+    inject('.ant-table-row.ant-table-row-level-0', el => {
+      const span = el.querySelector("td:nth-child(8) > span");
       if (span) {
         const productId = span.innerHTML.split(" ")[0];
         span.innerHTML = `<a href="/request-payment?productId=${productId}">${span.innerHTML}</a>`;
       }
     });
-
-
-    // Observe for new rows
-    const observer = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
-        mutation.addedNodes.forEach(node => {
-          if (node.nodeType === 1 && node.matches('.ant-table-row.ant-table-row-level-0')) {
-            const span = node.querySelector("td:nth-child(8) > span");
-            if (span) {
-              const productId = span.innerHTML.split(" ")[0];
-              span.innerHTML = `<a href="/request-payment?productId=${productId}">${span.innerHTML}</a>`;
-            }
-          }
-        });
-      });
-    });
-
-    const tableBody = document.querySelector('.ant-table-tbody');
-    if (tableBody) {
-      observer.observe(tableBody, { childList: true });
-    }
 
 })();

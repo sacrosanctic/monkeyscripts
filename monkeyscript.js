@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1124
+// @version      2026-01-03-1137
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment
@@ -15,13 +15,9 @@
 (function() {
     'use strict';
 
-    function addForm() {
-        const targetElement = document.querySelector('.ant-spin-container > :first-child');
-        if (!targetElement) {
-            console.log('Target element .ant-spin-container > :first-child not found');
-            return;
-        }
+    const selector = '.ant-spin-container > :first-child';
 
+    function addForm(targetElement) {
         const formHTML = `
             <form style="margin: 20px; padding: 10px; border: 1px solid #ccc;">
                 <label for="customInput">Custom Input: </label>
@@ -31,17 +27,26 @@
         `;
 
         targetElement.insertAdjacentHTML('afterbegin', formHTML);
+        console.log('Form added to', selector);
+    }
+
+    function checkAndAdd() {
+        const targetElement = document.querySelector(selector);
+        if (targetElement) {
+            addForm(targetElement);
+            return true;
+        }
+        return false;
     }
 
     // Check immediately
-    addForm();
-
-    // If not found, wait for it with MutationObserver
-    if (!document.querySelector('.ant-spin-container > :first-child')) {
+    if (!checkAndAdd()) {
+        console.log('Setting up observer for', selector);
         const observer = new MutationObserver(() => {
-            if (document.querySelector('.ant-spin-container > :first-child')) {
+            console.log('Mutation detected');
+            if (checkAndAdd()) {
                 observer.disconnect();
-                addForm();
+                console.log('Observer disconnected');
             }
         });
         observer.observe(document.body, { childList: true, subtree: true });

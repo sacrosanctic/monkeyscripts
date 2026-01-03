@@ -132,6 +132,15 @@ Enjoy :)<br><br><br>
 
 
 
+## Troubleshooting Auto-Updates
+
+If the script doesn't update automatically:
+
+1. Ensure "Check for userscript updates" is enabled in Tampermonkey settings (Dashboard > Settings > General).
+2. The script must have been installed with the @updateURL present. If installed before updates were added, reinstall using the URL above.
+3. Manually check for updates: Dashboard > Installed Userscripts > Select script > Check for updates.
+4. Confirm the raw GitHub URL is accessible: https://raw.githubusercontent.com/sacrosanctic/monkeyscripts/main/monkeyscript.js
+
 Remember To Breathe,<br>
 sacrosanctic
 

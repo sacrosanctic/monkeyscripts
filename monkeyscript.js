@@ -47,7 +47,7 @@
     const formHTML = `
         <form style="height: 2.25rem; padding: 0.5rem 1rem; border: 1px solid #020617; border-radius: 0.5rem; display: flex; align-items: center; background-color: white; color: #020617;">
             <label for="customInput">Search: </label>
-            <input id="customInput" name="productId" style="padding-left:4px" />
+            <input id="customInput" name="productId" style="padding-left:4px;outline:none;" />
             <button type="submit">Submit</button>
         </form>
     `;
@@ -57,14 +57,12 @@
     inject('.ant-spin-container', el => {
         if( el.children[1]) el.children[1].style.cssText += "overflow: auto; height: 800px;";
     });
-    inject('.ant-table-row.ant-table-row-level-0', el=>{
-      console.log(el)
-      console.log(el.querySelector("td:nth-child(8)"))
-      const asdf = el.querySelector("td:nth-child(8)")
-      const asdf2 = asdf.children[0].innerHTML.split(" ")[0]
-      console.log(asdf2)
-      // asdf.children[0].innerHTML = 
-
+    inject('.ant-table-row.ant-table-row-level-0', el => {
+      const span = el.querySelector("td:nth-child(8) > span");
+      if (span) {
+        const productId = span.innerHTML.split(" ")[0];
+        span.innerHTML = `<a href="/request-payment?productId=${productId}">${span.innerHTML}</a>`;
+      }
     });
 
     inject('.ant-table-content',el=>el.style.overflow="visible")

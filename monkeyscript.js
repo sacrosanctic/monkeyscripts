@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1250
+// @version      2026-01-03-1252
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -17,16 +17,12 @@
 
     const selector = '.ant-spin-container > :first-child';
 
-    function getElement() {
-        return document.querySelector(selector);
-    }
-
     let added = false;
 
     function addForm() {
         if (added) return;
 
-        const targetElement = getElement();
+        const targetElement = document.querySelector(selector);
         if (!targetElement) return
 
         const formHTML = `
@@ -45,11 +41,12 @@
     if (added) return;
 
     const observer = new MutationObserver(() => {
-        setTimeout(() => {
+        requestAnimationFrame(() => {
             addForm();
-            if (added) observer.disconnect();
-            
-        }, 100);
+            if (added) {
+                observer.disconnect();
+            }
+        });
     });
     observer.observe(document.body, { childList: true, subtree: true });
 })();

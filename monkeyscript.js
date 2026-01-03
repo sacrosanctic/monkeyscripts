@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1364
+// @version      2026-01-03-1365
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment*
@@ -133,9 +133,34 @@
       });
     });
 
-    const table = document.querySelector('.ant-table-container');
-    console.log('Table element:', table);
-    if (table) {
-      tableObserver.observe(table, { childList: true, subtree: true, characterData: true });
+    const existingTable = document.querySelector('.ant-table-container');
+    console.log('Existing table element:', existingTable);
+    if (existingTable) {
+      tableObserver.observe(existingTable, { childList: true, subtree: true, characterData: true });
+    } else {
+      // Wait for table to be added
+      const tableWaitObserver = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+          mutation.addedNodes.forEach(node => {
+            if (node.nodeType === 1) {
+              if (node.matches('.ant-table-container')) {
+                console.log('Table added:', node);
+                tableWaitObserver.disconnect();
+                tableObserver.observe(node, { childList: true, subtree: true, characterData: true });
+                return;
+              }
+              // Check descendants
+              const table = node.querySelector('.ant-table-container');
+              if (table) {
+                console.log('Table found in descendants:', table);
+                tableWaitObserver.disconnect();
+                tableObserver.observe(table, { childList: true, subtree: true, characterData: true });
+                return;
+              }
+            }
+          });
+        });
+      });
+      tableWaitObserver.observe(document.body, { childList: true, subtree: true });
     }
 })();

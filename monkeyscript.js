@@ -31,7 +31,7 @@
     }
 
     function getElement() {
-        return document.querySelector(selector);
+        return querySelector(selector);
     }
 
     // Check immediately
@@ -45,6 +45,7 @@
             console.log('Mutation detected');
             setTimeout(() => {
                 targetElement = getElement();
+                console.log(querySelector(".ant-spin-container"))
                 if (targetElement) {
                     addForm(targetElement);
                     observer.disconnect();
@@ -52,6 +53,6 @@
                 }
             }, 100);
         });
-        observer.observe(document.body, { childList: true, subtree: true });
+        observer.observe(body, { childList: true, subtree: true });
     }
 })();

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monkey Script for Payment
 // @namespace    http://tampermonkey.net/
-// @version      2026-01-03-1105
+// @version      2026-01-03-1112
 // @description  try to take over the world!
 // @author       You
 // @match        https://payment.xinchuan.tw/request-payment
@@ -17,7 +17,7 @@
 
     // 1. Identify the element you want to follow
     // Change '.target-selector' to the class, ID, or tag of the existing element
-    const targetElement = document.querySelector('.ant-spin-container > :first-child > :first-child');
+    const targetElement = document.querySelector('.ant-spin-container');
 
     if (targetElement) {
         // 2. Define your form HTML
@@ -29,8 +29,8 @@
 		    </form>
         `;
 
-        // 3. Insert the form after the target element
-        targetElement.insertAdjacentHTML('afterend', formHTML);
+        // 3. Insert the form as the first child of the target element
+        targetElement.insertAdjacentHTML('afterbegin', formHTML);
 
         // 4. Add functionality to your new form
         document.getElementById('submitBtn').addEventListener('click', (e) => {

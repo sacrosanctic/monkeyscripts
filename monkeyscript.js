@@ -55,12 +55,16 @@
     inject('.ant-spin-container > :first-child', formHTML);
 
     inject('.ant-spin-container', el => {
-        el.style.cssText += "display: flex; height: 100%; flex-direction: column;";
         if( el.children[1]) el.children[1].style.cssText += "overflow: auto; height: 800px;";
     });
     inject('.ant-table-row.ant-table-row-level-0', el=>{
       console.log(el)
       console.log(el.querySelector("td:nth-child(8)"))
+      const asdf = el.querySelector("td:nth-child(8)")
+      const asdf2 = asdf.children[0].innerHTML.split(" ")[0]
+      console.log(asdf2)
+      // asdf.children[0].innerHTML = 
+
     });
 
     inject('.ant-table-content',el=>el.style.overflow="visible")
